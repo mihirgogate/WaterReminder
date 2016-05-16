@@ -1,0 +1,17 @@
+{
+  "name": "WaterReminder",
+  "version": "1.0.0",
+  "description": "Water Reminder on Mac",
+  "dependencies": {
+    "menubar": "*"
+  },
+  "devDependencies": {
+    "electron-packager": "^5.1.0",
+    "electron-prebuilt": "^0.36.0"
+  },
+  "main": "main.js",
+  "scripts": {
+    "build": "electron-packager . Example --platform=darwin --arch=x64 --version=0.36.0 --icon=Icon.icns",
+    "start": "electron ."
+  }
+}
