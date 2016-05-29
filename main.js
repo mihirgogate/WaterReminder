@@ -1,4 +1,5 @@
 var app = require('app');
+var config = require('config');
 var Tray = require('tray');
 var Menu = require('menu');
 var path = require('path');
@@ -6,50 +7,61 @@ var BrowserWindow = require('browser-window');
 var util = require('util');
 var lib = require('./lib')
 
-var NUM_SECONDS_BETWEEN_REMINDER = 3600;
 var appIcon = null;
 var win = null;
 
-function getImagePath(imageFileName) {
-    return path.join(__dirname, 'images/' + imageFileName);
+function getFullImagePath(imageFilePath) {
+    return path.join(__dirname, imageFilePath);
 }
 
 function getEpoch() {
     return (new Date()).getTime() / 1000;
 }
 
+function getConfig(){
+  // Useful for dependancy injection as configs are read from config/default.json by the config package
+  return config
+}
+
 app.on('ready', function(){
   var timestampOfLastDrink = null;
-  var appIcon = new Tray(getImagePath('green.png'));
+  var config = getConfig();
+  var appIcon = new Tray(
+    getFullImagePath(config['STEADY_STATE_IMAGE_PATH'])
+  );
   var contextMenu = Menu.buildFromTemplate([
       {
-      label: 'Drank!',
+      label: config['REMINDER_COMPLETE_TEXT'],
       type: 'normal',
-      icon: getImagePath('water.png'),
+      icon: getFullImagePath(config['REMINDER_COMPLETE_IMAGE_PATH']),
       click: function() {
           timestampOfLastDrink = getEpoch();
       }
       },
-      { label: 'Quit',
+      { label: config['QUIT_TEXT'],
       accelerator: 'Command+Q',
       selector: 'terminate:',
       }
   ]);
-  appIcon.setToolTip('Drink Water');
+  appIcon.setToolTip(config['TOOL_TIP_TEXT']);
   appIcon.setContextMenu(contextMenu);
   var beeper = lib.Beeper({
     beep: function() {
-        appIcon.setImage(getImagePath('red.png'));
+        appIcon.setImage(
+          getFullImagePath(config['UNSTEADY_STATE_IMAGE_PATH'])
+        );
     },
     boop: function() {
-        appIcon.setImage(getImagePath('green.png'));
+        appIcon.setImage(
+          getFullImagePath(config['STEADY_STATE_IMAGE_PATH'])
+        );
     }
   });
   setInterval(function() {
-    if (lib.shouldToggle(timestampOfLastDrink, getEpoch(), NUM_SECONDS_BETWEEN_REMINDER)) {
+    if (lib.shouldToggle(timestampOfLastDrink, getEpoch(), config['NUM_SECONDS_BETWEEN_REMINDER'])) {
         beeper.toggle();
     } else {
         beeper.steady();
     }
-  }, 200);
+  }, config['REMINDER_FLASH_INTERVAL_IN_MS']);
 });

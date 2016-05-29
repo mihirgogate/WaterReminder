@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Water Reminder on Mac",
   "dependencies": {
+    "config": "^1.20.4",
     "menubar": "*"
   },
   "devDependencies": {
