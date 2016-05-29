@@ -1,5 +1,4 @@
 var app = require('app');
-var config = require('config');
 var Tray = require('tray');
 var Menu = require('menu');
 var path = require('path');
@@ -19,8 +18,16 @@ function getEpoch() {
 }
 
 function getConfig(){
-  // Useful for dependancy injection as configs are read from config/default.json by the config package
-  return config
+    return {
+        "STEADY_STATE_IMAGE_PATH": "images/green.png",
+        "UNSTEADY_STATE_IMAGE_PATH": "images/red.png",
+        "NUM_SECONDS_BETWEEN_REMINDER": 3600,
+        "REMINDER_FLASH_INTERVAL_IN_MS": 200,
+        "REMINDER_COMPLETE_IMAGE_PATH": "images/water.png",
+        "REMINDER_COMPLETE_TEXT": "Drank!",
+        "TOOL_TIP_TEXT": "Drink Water",
+        "QUIT_TEXT": "Quit"
+    };
 }
 
 app.on('ready', function(){

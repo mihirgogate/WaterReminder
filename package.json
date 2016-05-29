@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Water Reminder on Mac",
   "dependencies": {
-    "config": "^1.20.4",
     "menubar": "*"
   },
   "devDependencies": {
@@ -13,7 +12,7 @@
   },
   "main": "main.js",
   "scripts": {
-    "build": "electron-packager . Example --platform=darwin --arch=x64 --version=0.36.0",
+    "build": "electron-packager . WaterReminder --platform=darwin --arch=x64 --version=0.36.0 --overwrite",
     "start": "electron ."
   }
 }
