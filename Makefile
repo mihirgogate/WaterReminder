@@ -14,3 +14,9 @@ start:
 
 build:
 	npm run build
+	@echo "Now run 'make desktop' to add a shortcut on your desktop"
+
+application:
+	rm -rf /Applications/WaterReminder.app
+	mv -f WaterReminder-darwin-x64/WaterReminder.app /Applications
+	@echo "Added to Applications! Enjoy!"
